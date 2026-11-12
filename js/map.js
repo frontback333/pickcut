@@ -10,6 +10,7 @@ export function distance(a, b) {
   return 12742 * Math.asin(Math.min(1, Math.sqrt(Math.sin(dlat / 2) ** 2 + Math.cos(radians(a.lat)) * Math.cos(radians(b.lat)) * Math.sin(dlng / 2) ** 2)));
 }
 let scriptPromise;
+let naverFailed = false;
 let generation = 0;
 let reverseRevision = 0;
 let active = null;
@@ -63,6 +64,7 @@ export const mapState = {
     active?.fit();
   },
   zoomBy(delta) {
+    if (active?.provider === 'naver' && naverFailed) return;
     if (active?.map) active.map.setZoom(Math.max(6, Math.min(19, active.map.getZoom() + delta)));
   },
   searchMock(query) {
@@ -118,7 +120,10 @@ function externalLinks(container) {
   });
 }
 async function naverReady() {
-  if (!NAVER_MAPS_KEY_ID || new URLSearchParams(location.search).get('maps') === 'osm') return false;
+  const params = new URLSearchParams(location.search);
+  const localTest = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname) && params.get('naverKey') === 'invalid-test';
+  const keyId = localTest ? 'invalid-test' : NAVER_MAPS_KEY_ID;
+  if (naverFailed || !keyId || params.get('maps') === 'osm') return false;
   if (!scriptPromise) scriptPromise = new Promise(resolve => {
     let finished = false;
     const finish = value => {
@@ -128,13 +133,16 @@ async function naverReady() {
       resolve(value);
     };
     window.navermap_authFailure = () => {
+      naverFailed = true;
+      reverseRevision++;
       finish(false);
-      active?.fallback?.();
+      // The SDK clears its internals and writes its notice around this callback.
+      setTimeout(() => active?.fallback?.(), 0);
     };
-    const timeout = setTimeout(() => finish(false), 8000);
+    const timeout = setTimeout(() => finish(false), 3500);
     const tag = document.createElement('script');
-    tag.src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=' + encodeURIComponent(NAVER_MAPS_KEY_ID) + '&submodules=geocoder';
-    tag.onload = () => finish(!!window.naver?.maps);
+    tag.src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=' + encodeURIComponent(keyId) + '&submodules=geocoder';
+    tag.onload = () => finish(!naverFailed && typeof window.naver?.maps?.Map === 'function');
     tag.onerror = () => finish(false);
     document.head.append(tag);
   });
@@ -163,6 +171,7 @@ function reverseAddress() {
 
 export async function mountMap(container) {
   const current = ++generation;
+  const started = performance.now();
   if (new URLSearchParams(location.search).has('static')) {
     container.classList.add('static-map');
     container.innerHTML = '<div class="static-circle"><div class="map-pin"></div></div>';
@@ -173,12 +182,15 @@ export async function mountMap(container) {
   mapState.provider = 'loading';
   mapState.tiles = 0;
   mapState.emit();
-  const naver = await naverReady();
+  const ready = await naverReady();
   if (current !== generation || !container.isConnected) return;
   const startOsm = () => {
     if (current !== generation || !container.isConnected || active?.provider === 'osm') return;
-    active?.destroy();
+    const previous = active;
+    active = null;
+    previous?.destroy();
     container.replaceChildren();
+    mapState.tiles = 0;
     const map = L.map(container, { zoomControl: false, minZoom: 6, maxZoom: 19, zoomAnimation: false, fadeAnimation: false, markerZoomAnimation: false }).setView([mapState.lat,mapState.lng],12);
     map.attributionControl.setPosition('bottomleft');
     const circle = L.circle([mapState.lat,mapState.lng], { radius: mapState.radius * 1000, color: color(), weight: 1.5, fillOpacity: .12 }).addTo(map);
@@ -223,26 +235,42 @@ export async function mountMap(container) {
     externalLinks(container);
     mapState.emit();
   };
-  if (!naver) {
+  if (!ready || naverFailed) {
     startOsm();
     return;
   }
   try {
     const N = window.naver.maps;
     const map = new N.Map(container, { center: new N.LatLng(mapState.lat,mapState.lng), zoom: 12, minZoom: 6, maxZoom: 19, zoomControl: false, scaleControl: false, mapDataControl: true, logoControlOptions: { position: N.Position.LEFT_CENTER }, mapDataControlOptions: { position: N.Position.LEFT_CENTER } });
+    const timer = setTimeout(startOsm, Math.max(0, 3500 - (performance.now() - started)));
+    const isCurrent = () => current === generation && !naverFailed && active?.map === map;
+    active = {
+      provider: 'naver', map, fallback: startOsm,
+      destroy() {
+        clearTimeout(timer);
+        // Authentication failure can null the SDK used by destroy() itself.
+        if (window.naver?.maps !== N) return;
+        try {
+          map.destroy();
+        } catch {
+          // A partially initialized SDK must not prevent DOM cleanup or OSM.
+        }
+      }
+    };
     const marker = new N.Marker({ map, position: new N.LatLng(mapState.lat,mapState.lng) });
     const circle = new N.Circle({ map, center: marker.getPosition(), radius: mapState.radius * 1000, strokeColor: color(), strokeWeight: 1.5, fillColor: color(), fillOpacity: .12 });
     MAP_SALONS.forEach(s => new N.Marker({ map, position: new N.LatLng(s.lat,s.lng), title: s.name + ' (목업)', icon: { content: '<div class="salon-marker"></div>', anchor: new N.Point(7,7) } }));
-    const timer = setTimeout(startOsm,12000);
     N.Event.addListener(map,'tilesloaded', () => {
+      if (!isCurrent()) return;
       clearTimeout(timer);
       mapState.tiles++;
       mapState.emit();
       externalLinks(container);
     });
-    active = {
-      provider: 'naver', map, marker, circle, fallback: startOsm,
+    Object.assign(active, {
+      marker, circle,
       position(recenter) {
+        if (!isCurrent()) return;
         const p = new N.LatLng(mapState.lat,mapState.lng);
         marker.setPosition(p);
         circle.setCenter(p);
@@ -250,20 +278,20 @@ export async function mountMap(container) {
         if (recenter) map.setCenter(p);
       },
       fit() {
+        if (!isCurrent()) return;
         map.fitBounds(circle.getBounds(), { top: 24, right: 24, bottom: 24, left: 24 });
       },
       boundsPixels() {
         const b = circle.getBounds();
         const projection = map.getProjection();
         return [projection.fromCoordToOffset(b.getMax()), projection.fromCoordToOffset(b.getMin())];
-      },
-      destroy() {
-        clearTimeout(timer);
-        map.destroy();
       }
-    };
-    N.Event.addListener(map,'click', e => mapState.select(e.coord.lat(),e.coord.lng(),false));
+    });
+    N.Event.addListener(map,'click', e => {
+      if (isCurrent()) mapState.select(e.coord.lat(),e.coord.lng(),false);
+    });
     N.Event.addListener(map,'idle', () => {
+      if (!isCurrent()) return;
       mapState.zoom = map.getZoom();
       mapState.centerLat = map.getCenter().lat();
       mapState.centerLng = map.getCenter().lng();
@@ -279,6 +307,7 @@ export async function mountMap(container) {
 }
 export function unmountMap() {
   generation++;
-  active?.destroy();
+  const previous = active;
   active = null;
+  previous?.destroy();
 }

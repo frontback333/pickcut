@@ -198,7 +198,20 @@ export function setupScreen(screen, root) {
     choices('perm_','perm',['none','recent','old']);
     choices('iron_','iron',['no','daily']);
     label('txt_step', () => Math.min(3,v.captures+1) + ' / 3');
-    ['front','side','back'].forEach((key,i) => bind(() => selected(get('pill_'+key),v.captures >= i+1)));
+    if (screen === 'Scan') {
+      ['front','side','back'].forEach((key,i) => {
+        const pill = get('pill_' + key);
+        const name = pill.textContent.trim();
+        bind(() => {
+          const complete = v.captures > i;
+          const current = v.captures === i;
+          pill.classList.toggle('is-complete', complete);
+          pill.classList.toggle('is-current', current);
+          pill.classList.toggle('is-pending', !complete && !current);
+          pill.setAttribute('aria-label', name + ' · ' + (complete ? '찍음' : current ? '촬영 차례' : '남음'));
+        });
+      });
+    }
     on('face_guide', () => {
       if (state.consentSeen && !v.consent_open) camera.capture(get('camera_area'));
     });

@@ -1,0 +1,40 @@
+.scan-steps {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.scan-step {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1.5px solid var(--sub);
+  background: var(--transparent);
+  color: var(--cameraSub);
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+  cursor: default;
+  -webkit-tap-highlight-color: var(--transparent);
+}
+
+.scan-step.is-current {
+  border-color: var(--surface);
+  color: var(--surface);
+}
+
+.scan-step.is-complete {
+  border: 0;
+  background: var(--primary);
+  color: var(--surface);
+}
+
+.scan-step svg {
+  display: none;
+}
+
+.scan-step.is-complete svg {
+  display: block;
+}
