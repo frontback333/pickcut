@@ -1,0 +1,11 @@
+.scan-info { padding-top: 6px; }
+.scan-info .v-card { padding: 18px 16px; gap: 14px; }
+.scan-info [data-id="card_thickness"] h3 { margin-bottom: -8px; }
+.scan-info .v-card h3 { display: flex; align-items: center; gap: 8px; }
+.v-field { display: flex; flex-direction: column; gap: 10px; }
+.v-field > p { color: var(--sub); font-size: 14px; }
+.hair-dot { width: 14px; height: 14px; border: 1px solid var(--border); border-radius: 50%; display: inline-block; }
+.hair-black { background: var(--hair-black); }
+.hair-dark { background: var(--hair-dark); }
+.hair-light { background: var(--hair-light); }
+.hair-ash { background: var(--hair-ash); }

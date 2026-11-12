@@ -1,0 +1,53 @@
+.care-scan-head { display: flex; gap: 12px; }
+.care-scan-head h3 { margin: 0 0 6px; font-size: 16px; }
+.care-camera-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--primaryTint); display: grid; place-items: center; color: var(--primary); flex-shrink: 0; }
+.care-scan-button { height: 46px; border: 1.5px solid var(--primary); border-radius: 12px; background: var(--surface); color: var(--primary); font-size: 15px; font-weight: 600; display: flex; gap: 6px; align-items: center; justify-content: center; }
+.care-note { display: flex; flex-direction: column; gap: 10px; }
+.care-note label { font-size: 14px; color: var(--sub); }
+.care-note textarea { height: 110px; width: 100%; resize: none; border-radius: 12px; border: 1.5px solid var(--borderStrong); padding: 14px; background: var(--surface); color: var(--ink); line-height: 1.5; }
+.care-note .v-row { align-items: flex-start; gap: 10px; }
+.care-note .v-row > :last-child { white-space: nowrap; }
+[data-id="care_scan_done"] { display: flex; flex-direction: column; gap: 8px; }
+.care-camera { cursor: pointer; }
+.care-camera p { max-width: 100%; }
+[data-id="card_my_info"] { padding: 14px 16px; }
+[data-id="card_care_request"] p { font-size: 14px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.care-request-title { color: var(--primaryText); font-size: 13px; }
+.booking-duration { padding: 5px 0; font-size: 14px; }
+.booking-duration > span { color: var(--sub); }
+.booking-delayed { color: var(--warn) !important; }
+.flash-section { display: flex; flex-direction: column; gap: 12px; }
+.flash-section h2 { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 17px; }
+.flash-section h2 .v-icon { color: var(--primary); }
+.flash-list { display: flex; gap: 10px; }
+.flash-card { width: 214px; flex-shrink: 0; border: 1px solid var(--border); border-radius: 16px; padding: 14px; background: var(--surface); display: flex; flex-direction: column; gap: 6px; }
+.flash-card h3, .flash-card p { margin: 0; }
+.flash-card h3 { font-size: 16px; }
+.flash-card .warn { color: var(--warn); background: var(--warnBg); }
+.flash-off { color: var(--surface); background: var(--primary); }
+.flash-price { display: flex; align-items: center; gap: 8px; }
+.flash-price s { font-size: 13px; color: var(--muted); }
+.flash-price b { font-size: 16px; color: var(--primaryText); }
+.flash-card button { margin-top: auto; height: 38px; border: 0; border-radius: 12px; background: var(--primaryTint); color: var(--primaryText); font-size: 13px; font-weight: 600; }
+.coupon-row { color: var(--primaryText); font-size: 14px; }
+.schedule-entry { color: var(--ink); }
+.schedule-entry h3 { font-size: 16px; }
+.schedule-entry strong { font-size: 13px; color: var(--primary); white-space: nowrap; }
+.portfolio-filters { display: flex; gap: 6px; }
+.portfolio-filters button { height: 32px; padding: 0 14px; border: 0; border-radius: 999px; color: var(--chipText); background: var(--chipBg); font-size: 12px; }
+.portfolio-filters button.selected { background: var(--ink); color: var(--surface); }
+.portfolio-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; }
+.portfolio-grid button { position: relative; aspect-ratio: 1; padding: 0; border: 0; border-radius: 12px; overflow: hidden; background: var(--chipBg); }
+.portfolio-grid img { width: 100%; height: 100%; object-fit: cover; }
+.portfolio-grid span { position: absolute; left: 6px; bottom: 6px; padding: 2px 6px; border-radius: 6px; background: var(--portfolio-label); color: var(--surface); font-size: 11px; font-weight: 600; }
+.portfolio-viewer { position: absolute; inset: 0; background: var(--portfolio-scrim); display: flex; align-items: center; justify-content: center; pointer-events: auto; }
+.viewer-content { width: 100%; position: relative; display: flex; flex-direction: column; gap: 16px; color: var(--surface); }
+.viewer-content > img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.viewer-content h3 { margin: 0 20px; font-size: 16px; }
+.viewer-content .primary-button { margin: 0 20px; min-height: 54px; }
+.viewer-close { position: absolute; top: -48px; right: 8px; width: 44px; height: 44px; border: 0; background: none; color: var(--surface); font-size: 32px; }
+[data-screen="Care"] .check-card { text-align: left; }
+[data-screen="Profile"] [data-id="btn_book"] { display: flex; align-items: center; justify-content: center; }
+[data-screen="Profile"] .profile-footer { padding: 16px 20px max(28px,env(safe-area-inset-bottom)); }
+[data-screen="Profile"] .content { padding-bottom: 0 !important; }
+[data-screen="MatchHome"] .content { padding-bottom: 88px !important; }

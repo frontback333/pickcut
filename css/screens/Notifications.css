@@ -1,0 +1,14 @@
+.notifications { gap: 12px; }
+.noti-group { font-size: 13px; color: var(--sub); }
+.notification { border: 0; text-align: left; flex-direction: row !important; gap: 12px; width: 100%; border-radius: 16px; }
+.noti-icon { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; color: var(--primary); background: var(--primaryTint); }
+.noti-icon.warn { color: var(--warn); background: var(--warnBg); }
+.noti-icon.muted { color: var(--sub); background: var(--chipBg); }
+.noti-copy { min-width: 0; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.noti-head { display: flex; align-items: center; gap: 6px; }
+.noti-head b { font-size: 15px; flex: 1; }
+.noti-head small { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.noti-dot, .bell-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+.noti-body { white-space: pre-line; font-size: 14px; color: var(--sub); line-height: 1.5; }
+.noti-copy strong { color: var(--primary); font-size: 13px; }
+.bell-dot { position: absolute; top: 6px; right: 7px; border: 1.5px solid var(--surface); box-sizing: content-box; }

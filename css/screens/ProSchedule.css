@@ -1,0 +1,15 @@
+.schedule { gap: 16px; padding-top: 6px; }
+.schedule-summary { background: var(--primary); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 8px; color: var(--surface); }
+.schedule-summary p { color: var(--onPrimarySub); font-size: 14px; }
+.schedule-summary p:first-child { font-size: 13px; }
+.schedule .v-card { gap: 12px; }
+.schedule [data-id="booking_list"] { gap: 0; }
+.schedule .primary-button { min-height: 50px; }
+.schedule-row { display: flex; align-items: center; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--divider); }
+.schedule-row:first-child { padding-top: 4px; }
+.schedule-row:last-child { border: 0; padding-bottom: 4px; }
+.schedule-row > div { flex: 1; min-width: 0; font-size: 15px; }
+.schedule-row > b { max-width: 100px; }
+.schedule-row p { margin-top: 0; }
+.care-preview { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.v-tag.warn { color: var(--warn) !important; background: var(--warnBg) !important; }

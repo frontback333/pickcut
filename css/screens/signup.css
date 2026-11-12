@@ -1,0 +1,32 @@
+[data-screen="SignUpRole"] .form-body { gap: 14px; min-height: 776px; }
+[data-screen="SignUpRole"] .role-intro { display: flex; flex-direction: column; gap: 6px; height: 63px; flex-shrink: 0; }
+[data-screen="SignUpRole"] .role-card { display: grid; grid-template-columns: 50px minmax(0,1fr); column-gap: 16px; min-height: 144px; position: relative; padding: 18px; border-width: 1.5px !important; }
+[data-screen="SignUpRole"] .role-card.selected { border-width: 2px !important; }
+.role-icon { width: 50px; height: 50px; background: var(--primaryTint); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--primary); }
+.role-icon img { width: 28px; height: 28px; filter: invert(23%) sepia(85%) saturate(3787%) hue-rotate(228deg); }
+.role-copy { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.role-copy p { max-width: 208px; }
+.partner-hero p { font-size: 14px; }
+.role-copy .role-title { font-size: 18px; gap: 8px; white-space: nowrap; }
+.role-copy .tags { gap: 6px; white-space: nowrap; }
+.role-card > .checkmark { position: absolute; right: 18px; top: 18px; border-radius: 50% !important; }
+.role-card.selected > .checkmark { border-color: var(--primary) !important; background: var(--primary) !important; }
+.role-badge { color: var(--warn); background: var(--warnBg); font-size: 11px; }
+[data-screen="SignUpRole"] .tag { font-weight: 700; font-size: 12px; padding: 3px 8px; }
+[data-screen="SignUpRole"] .notice { margin: 0; }
+[data-screen="SignUpRole"] .role-spacer { flex: 1; }
+[data-screen="SignUpRole"] .text-button { min-height: 40px; font-size: 14px; font-weight: 600; }
+[data-screen="SignUpUser"] .form-body { gap: 22px; }
+.social-apple { background: var(--brand-apple); color: var(--surface); }
+.social-buttons button { min-height: 50px; border: none; }
+.terms { background: var(--surface); border: none; border-radius: 20px; padding: 16px; gap: 6px; }
+.terms .check-row { min-height: 30px; }
+.terms .check-row:first-child { font-size: 15px; font-weight: 700; min-height: 36px; padding-bottom: 10px; margin-bottom: 4px; border-bottom: 1px solid var(--divider); }
+.verify { background: var(--surface) !important; border: 1.5px solid var(--primary) !important; }
+.form-input:disabled { opacity: .5; }
+.upload-label { border-style: solid; min-height: 88px; flex-direction: column; gap: 8px; color: var(--primary) !important; font-weight: 700 !important; }
+.upload-label small { font-size: 12px; color: var(--sub); font-weight: 400; }
+.license-note { color: var(--warn) !important; font-size: 12px !important; }
+@media (max-width: 760px) {
+  [data-screen="SignUpRole"] .form-body { min-height: calc(100dvh - 68px); }
+}

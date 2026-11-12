@@ -1,0 +1,42 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; }
+body { background: var(--desk); color: var(--ink); font-family: 'IBM Plex Sans KR', 'Malgun Gothic', sans-serif; }
+button, input, textarea { font: inherit; }
+button, a, [role="button"] { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button, a { cursor: pointer; }
+a { text-decoration: none; color: var(--primary); }
+button { color: inherit; }
+button:disabled, a[aria-disabled="true"] { cursor: default; background: var(--cameraSub) !important; color: var(--surface) !important; }
+input, textarea { font-size: 16px !important; min-width: 0; }
+input:focus, textarea:focus { outline: 1.5px solid var(--primary); outline-offset: -1.5px; }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: 1; }
+button:focus-visible, a:focus-visible, [role="button"]:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+[hidden] { display: none !important; }
+#workspace { height: 100dvh; width: calc(100% - 320px); display: flex; justify-content: center; align-items: center; }
+.dev-disabled #workspace { width: 100%; }
+#phone { width: 390px; height: 844px; flex-shrink: 0; position: relative; overflow: hidden; background: var(--bg); border-radius: 36px; box-shadow: 0 20px 70px var(--phone-shadow); transform: scale(var(--phone-scale)); }
+#app, .screen { height: 100% !important; width: 100% !important; min-height: 0 !important; position: relative; overflow: hidden; }
+.screen { display: flex; flex-direction: column; }
+.page-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; overscroll-behavior: contain; display: flex; flex-direction: column; }
+.page-scroll::-webkit-scrollbar, .horizontal::-webkit-scrollbar { display: none; }
+.page-header { flex-shrink: 0; }
+.content { overflow: visible !important; flex-shrink: 0 !important; }
+.content > * { flex-shrink: 0; }
+.page-scroll > .content { flex: 1 0 auto !important; }
+.horizontal { overflow-x: auto !important; scrollbar-width: none; flex-wrap: nowrap !important; }
+.bottom-nav, .fixed-footer { flex-shrink: 0; z-index: 10; padding-bottom: max(12px, env(safe-area-inset-bottom)) !important; }
+.fixed-footer { padding-bottom: max(26px, env(safe-area-inset-bottom)) !important; }
+.screen > [data-id="btn_write"], .screen > [data-id="btn_match_fab"] { z-index: 11; bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
+.screen [data-id="btn_match_fab"], .screen [data-id="btn_write"] { flex-shrink: 0; }
+.full-capture #phone, .full-capture #app, .full-capture .screen { height: auto !important; min-height: 844px !important; overflow: visible !important; }
+.full-capture .page-scroll { overflow: visible !important; flex: none !important; }
+.full-capture { height: auto; overflow: visible; }
+.full-capture #workspace { height: auto; min-height: 844px; align-items: flex-start; }
+.full-capture #phone { transform: none; border-radius: 0; box-shadow: none; }
+@media (max-width: 760px) {
+  body { background: var(--bg); }
+  #workspace { width: 100%; height: 100dvh; }
+  #phone { width: 100%; height: 100dvh; border-radius: 0; box-shadow: none; transform: none; }
+  #app { padding-top: env(safe-area-inset-top); }
+  .dev-enabled #app { padding-top: calc(32px + env(safe-area-inset-top)); }
+}

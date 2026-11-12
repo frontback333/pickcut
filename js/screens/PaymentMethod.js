@@ -1,0 +1,8 @@
+import { PAYMENT_METHODS, CARD_COMPANIES } from '../data.js';
+import { header, button } from '../ui/forms.js';
+import { setupScreen } from '../ui/screen.js';
+const methods = tab => Object.entries(PAYMENT_METHODS).filter(([,p]) => p.tab === tab).map(([key,p]) => `<button data-id="pm_${key}" class="method-row" role="radio"><span data-id="logo_${key}" class="pay-logo" style="--pay-bg:var(--brand-${key});--pay-ink:var(${key === 'kakao' ? '--ink' : '--surface'})">${p.badge}</span><span class="payment-copy"><b>${p.name}</b><small>${p.sub}</small></span><span class="radio" data-id="radio_${key}"></span></button>`).join('');
+export const markup = `<div class="screen" data-screen="PaymentMethod"><div class="page-scroll">${header('결제 수단 선택')}<div class="form-body"><div class="payment-tabs">${[['easy','간편결제'],['card','카드'],['other','기타']].map(([key,title]) => `<button data-id="tab_${key}">${title}</button>`).join('')}</div>${[['easy','간편결제'],['card','신용·체크카드'],['other','기타 결제']].map(([key,title]) => `<section data-id="sec_${key}" class="payment-section"><h3>${title}</h3><div data-id="sec_${key}_list" class="payment-list">${methods(key)}${key === 'card' ? `<div class="card-companies">${Object.entries(CARD_COMPANIES).map(([id,title]) => `<button data-id="cardco_${id}" class="toggle">${title}</button>`).join('')}</div>` : ''}</div></section>`).join('')}<p class="notice">결제는 실제로 이뤄지지 않는 프로토타입이에요. 선택한 결제 수단은 다음 예약에도 기본으로 쓰여요.</p></div></div><footer class="form-footer" data-id="bottom_bar">${button('btn_pay_method_done','카카오페이로 선택 완료')}</footer></div>`;
+export function mount(root) {
+  return setupScreen('PaymentMethod', root);
+}
